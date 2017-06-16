@@ -1,14 +1,15 @@
 package ru.vetalshev.controller;
 
 import ru.vetalshev.DataSourceHolder;
-import ru.vetalshev.dao.UserDaoImpl;
-import ru.vetalshev.model.User;
+import ru.vetalshev.dao.ArticleDaoImpl;
+import ru.vetalshev.model.Article;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,26 +27,21 @@ public class HomeController extends HttpServlet {
             throws ServletException, IOException {
 
         Connection connection = null;
+        DataSource ds = DataSourceHolder.getInstance().getDataSource();
 
         try {
-            connection = DataSourceHolder.getInstance().getDataSource().getConnection();
+            connection = ds.getConnection();
 
             connection.setAutoCommit(false); //TODO объединение нескольких запросов в одну транзакцию
 
-            UserDaoImpl userDao = new UserDaoImpl(connection);
-            List<User> users = userDao.findAll();
+            ArticleDaoImpl articleDao = new ArticleDaoImpl(connection);
+            List<Article> articles = articleDao.findLastAdded(5);
 
             connection.commit(); // TODO
 
-            System.out.println(users);
-
             response.setContentType("text/html");
-
-//            response.getWriter().print(users);
-            request.setAttribute("users", users);
-            request.getRequestDispatcher("/users.jsp").forward(request, response);
-
-
+            request.setAttribute("articles", articles);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -57,8 +53,6 @@ public class HomeController extends HttpServlet {
                 }
             }
         }
-
-
     }
 
 }

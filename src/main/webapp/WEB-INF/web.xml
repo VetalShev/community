@@ -5,6 +5,15 @@
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
 
+    <servlet>
+        <servlet-name>HomeController</servlet-name>
+        <servlet-class>ru.vetalshev.controller.HomeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeController</servlet-name>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
+
     <resource-ref>
         <description>MySQL DB Connection Pool</description>
         <res-ref-name>community</res-ref-name>

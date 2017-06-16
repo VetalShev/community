@@ -71,7 +71,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
         PreparedStatement st = null;
         ResultSet rs = null;
 
-        String FIND_ALL_SQL = "SELECT id, authorId, title, text, creationDate FROM article WHERE ORDER BY creationDate DESC LIMIT 5";
+        String FIND_ALL_SQL = "SELECT id, authorId, title, text, creationDate FROM article ORDER BY creationDate DESC LIMIT 5";
         List<Article> articles = new ArrayList<>();
 
         try {
@@ -106,7 +106,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
         PreparedStatement st = null;
         ResultSet rs = null;
 
-        String FIND_ALL_SQL = "SELECT id, authorId, title, text, creationDate FROM article WHERE ORDER BY creationDate DESC LIMIT " + limit;
+        String FIND_ALL_SQL = "SELECT id, authorId, title, text, creationDate FROM article ORDER BY creationDate DESC LIMIT " + limit;
         List<Article> articles = new ArrayList<>();
 
         try {
