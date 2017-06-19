@@ -13,12 +13,13 @@ import java.util.List;
 
 public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<Article> {
 
-    public ArticleDaoImpl(Connection connection) {
-        super(connection);
+    public ArticleDaoImpl() {
+        System.out.println("CONSTRUCTOR ArticleDao");
     }
 
     @Override
     public List<Article> findByTitle(String title) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -46,6 +47,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return articles;
@@ -68,6 +70,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
 
     @Override
     public List<Article> findLastAdded() {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -96,6 +99,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return articles;
@@ -103,6 +107,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
 
     @Override
     public List<Article> findLastAdded(int limit) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -111,6 +116,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
 
         try {
             st = connection.prepareStatement(FIND_ALL_SQL);
+//            st.setMaxRows(); // TODO limit
             rs = st.executeQuery();
 
             while (rs.next()) {
@@ -131,6 +137,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return articles;
@@ -138,6 +145,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
 
     @Override
     public List<Article> findAll() {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -166,6 +174,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return articles;
@@ -173,6 +182,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
 
     @Override
     public Article findById(int id) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -200,6 +210,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return article;

@@ -8,12 +8,13 @@ import java.util.List;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
 
-    public UserDaoImpl(Connection connection) {
-        super(connection);
+    public UserDaoImpl() {
+        System.out.println("CONSTRUCTOR UserDao");
     }
 
     @Override
     public List<User> findAll() {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -40,6 +41,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return users;
@@ -47,6 +49,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
 
     @Override
     public User findById(int id) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -71,6 +74,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return user;
@@ -78,6 +82,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
 
     @Override
     public User findByEmail(String email) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -102,6 +107,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return user;
@@ -109,6 +115,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
 
     @Override
     public List<User> findByName(String name) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -136,6 +143,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return users;
@@ -143,6 +151,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
 
     @Override
     public boolean delete(int id) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -159,6 +168,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return flag;
@@ -166,6 +176,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
 
     @Override
     public boolean create(User user) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -183,6 +194,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return flag;
@@ -190,6 +202,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
 
     @Override
     public User update(User user) {
+        Connection connection = getConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -204,6 +217,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao<User> {
             e.printStackTrace();
         } finally {
             releaseMemory(st, rs);
+            closeConnection(connection);
         }
 
         return user;

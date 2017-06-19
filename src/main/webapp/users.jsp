@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<c:set var="context" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +15,7 @@
     <ul>
         <c:forEach items="${users}" var="user">
             <li>
-                <a href="/users/${user.id}">${user.name}</a>
+                <a href="${context}/users/${user.id}">${user.name}</a>
             </li>
         </c:forEach>
     </ul>
