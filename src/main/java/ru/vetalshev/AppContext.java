@@ -1,12 +1,16 @@
 package ru.vetalshev;
 
-import ru.vetalshev.dao.ArticleDao;
-import ru.vetalshev.dao.ArticleDaoImpl;
-import ru.vetalshev.dao.UserDao;
-import ru.vetalshev.dao.UserDaoImpl;
+import ru.vetalshev.dao.*;
+import ru.vetalshev.dao.impl.ArticleDaoImpl;
+import ru.vetalshev.dao.impl.CommentDaoImpl;
+import ru.vetalshev.dao.impl.UserDaoImpl;
 import ru.vetalshev.model.Article;
+import ru.vetalshev.model.Comment;
 import ru.vetalshev.model.User;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class AppContext {
@@ -16,7 +20,15 @@ public class AppContext {
     }
 
     private static class DataSourceHolder {
-        public static final DataSource dataSource = ru.vetalshev.DataSourceHolder.getInstance().getDataSource();
+        public static DataSource dataSource;
+        static {
+            try {
+                Context ctx = new InitialContext();
+                dataSource = (DataSource) ctx.lookup("java:comp/env/community");
+            } catch (NamingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static class ArticleDaoHolder {
@@ -27,9 +39,9 @@ public class AppContext {
         public static final UserDao<User> userDao = new UserDaoImpl();
     }
 
-
-
-
+    private static class CommentDaoHolder {
+        public static final CommentDao<Comment> commentDao = new CommentDaoImpl();
+    }
 
     public static DataSource getDataSource() {
         return DataSourceHolder.dataSource;
@@ -41,6 +53,10 @@ public class AppContext {
 
     public static UserDao<User> getUserDao() {
         return UserDaoHolder.userDao;
+    }
+
+    public static CommentDao<Comment> getCommentDao() {
+        return CommentDaoHolder.commentDao;
     }
 
 }

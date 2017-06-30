@@ -1,6 +1,7 @@
-package ru.vetalshev.dao;
+package ru.vetalshev.dao.impl;
 
 import ru.vetalshev.AppContext;
+import ru.vetalshev.dao.Dao;
 import ru.vetalshev.model.Entity;
 
 import javax.sql.DataSource;

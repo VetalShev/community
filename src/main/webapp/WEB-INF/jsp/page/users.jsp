@@ -3,21 +3,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<c:set var="context" value="${pageContext.request.contextPath}" />
+<%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-    <h1>Users list</h1>
+<c:set var="title" value="Users list" />
+
+<template:master metaTitle="${title}">
+    <h1>title</h1>
 
     <ul>
         <c:forEach items="${users}" var="user">
+            <c:url var="userUrl" value="/users/${user.id}" />
             <li>
-                <a href="${context}/users/${user.id}">${user.name}</a>
+                <a href="${userUrl}">${user.name}</a>
             </li>
         </c:forEach>
     </ul>
-</body>
-</html>
+</template:master>

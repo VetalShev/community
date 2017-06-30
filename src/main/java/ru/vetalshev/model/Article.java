@@ -8,8 +8,8 @@ public class Article extends Entity {
     private String text;
     private String title;
     private Date date;
-    private User author; // TODO: объект, а не просто ID
-    private List<Comment> comments; // TODO: статья содержит комментарии
+    private User author; // объект, а не просто authorId
+    private List<Comment> comments; // статья содержит комментарии
 
     public String getText() {
         return text;

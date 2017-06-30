@@ -6,12 +6,12 @@
     <display-name>Archetype Created Web Application</display-name>
 
     <servlet>
-        <servlet-name>HomeController</servlet-name>
-        <servlet-class>ru.vetalshev.controller.HomeController</servlet-class>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>ru.vetalshev.DispatcherServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HomeController</servlet-name>
-        <url-pattern></url-pattern>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <resource-ref>
@@ -31,23 +31,36 @@
         <param-value>true</param-value>
     </init-param>
 
-    <servlet>
-        <servlet-name>jsp</servlet-name>
-        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
-        <init-param>
-            <param-name>fork</param-name>
-            <param-value>false</param-value>
-        </init-param>
-        <init-param>
-            <param-name>xpoweredBy</param-name>
-            <param-value>false</param-value>
-        </init-param>
-        <init-param>
-            <param-name>development</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
+    <filter>
+        <filter-name>JspFilter</filter-name>
+        <filter-class>ru.vetalshev.filter.JspFilter</filter-class>
+        <!--<init-param>-->
+            <!--<param-name>encoding</param-name>-->
+            <!--<param-value>UTF-8</param-value>-->
+        <!--</init-param>-->
+    </filter>
+
+    <!--<servlet>-->
+        <!--<servlet-name>jsp</servlet-name>-->
+        <!--<servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>-->
+        <!--<init-param>-->
+            <!--<param-name>fork</param-name>-->
+            <!--<param-value>false</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>xpoweredBy</param-name>-->
+            <!--<param-value>false</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>development</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>trimSpaces</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+        <!--<load-on-startup>3</load-on-startup>-->
+    <!--</servlet>-->
 
     <!--TODO: turn on Errors Pages only on production server-->
     <!--<error-page>-->
@@ -64,5 +77,12 @@
         <!--<error-code>500</error-code>-->
         <!--<location>/500.jsp</location>-->
     <!--</error-page>-->
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <el-enabled>true</el-enabled>
+            <scripting-enabled>true</scripting-enabled>
+        </jsp-property-group>
+    </jsp-config>
 
 </web-app>

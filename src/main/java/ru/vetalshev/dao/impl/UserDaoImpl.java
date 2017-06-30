@@ -1,5 +1,6 @@
-package ru.vetalshev.dao;
+package ru.vetalshev.dao.impl;
 
+import ru.vetalshev.dao.UserDao;
 import ru.vetalshev.model.User;
 
 import java.sql.*;

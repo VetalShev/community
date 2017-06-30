@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface Dao<T extends Entity> {
 
-    public List<T> findAll();
+    List<T> findAll();
 
-    public T findById(int id);
+    T findById(int id);
 
-    public boolean delete(int id);
+    boolean delete(int id);
 
-    public boolean create(T entity);
+    boolean create(T entity);
 
-    public T update(T entity);
+    T update(T entity);
 
 }

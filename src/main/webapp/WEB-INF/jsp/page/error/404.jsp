@@ -3,6 +3,6 @@
 <head>
 </head>
 <body>
-    <h1>Ups... Something goes wrong!</h1>
+    <h1>404! Ups... Something goes wrong!</h1>
 </body>
 </html>

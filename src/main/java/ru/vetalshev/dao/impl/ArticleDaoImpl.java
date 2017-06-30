@@ -1,5 +1,6 @@
-package ru.vetalshev.dao;
+package ru.vetalshev.dao.impl;
 
+import ru.vetalshev.dao.ArticleDao;
 import ru.vetalshev.model.Article;
 import ru.vetalshev.model.User;
 
@@ -12,6 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<Article> {
+
+    private static final String FIND_ALL_ARTICLES_SQL = "SELECT article.id AS articleId, article.title AS articleTitle, article.creationDate AS articleCreationDate, article.text AS articleText, user.id AS authorId, user.name AS authorName, user.email AS authorEmail FROM article LEFT JOIN user ON article.authorId = user.id ORDER BY creationDate";
+    private static final String FIND_LAST_ARTICLES_SQL = "SELECT article.id AS articleId, article.title AS articleTitle, article.creationDate AS articleCreationDate, article.text AS articleText, user.id AS authorId, user.name AS authorName, user.email AS authorEmail FROM article LEFT JOIN user ON article.authorId = user.id ORDER BY creationDate DESC";
+    private static final String FIND_ARTICLE_BY_ID_SQL = "SELECT article.id AS articleId, article.title AS articleTitle, article.creationDate AS articleCreationDate, article.text AS articleText, user.id AS authorId, user.name AS authorName, user.email AS authorEmail FROM article INNER JOIN user ON article.id=? AND user.id=article.authorId";
 
     public ArticleDaoImpl() {
         System.out.println("CONSTRUCTOR ArticleDao");
@@ -70,39 +75,7 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
 
     @Override
     public List<Article> findLastAdded() {
-        Connection connection = getConnection();
-        PreparedStatement st = null;
-        ResultSet rs = null;
-
-        String FIND_ALL_SQL = "SELECT id, authorId, title, text, creationDate FROM article ORDER BY creationDate DESC LIMIT 5";
-        List<Article> articles = new ArrayList<>();
-
-        try {
-            st = connection.prepareStatement(FIND_ALL_SQL);
-            rs = st.executeQuery();
-
-            while (rs.next()) {
-                Article article = new Article();
-
-                article.setId(rs.getInt("id"));
-                article.setId(rs.getInt("authorId"));
-                article.setTitle(rs.getString("title"));
-                article.setText(rs.getString("text"));
-                article.setDate(rs.getDate("creationDate"));
-
-                articles.add(article);
-            }
-
-            return articles;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            releaseMemory(st, rs);
-            closeConnection(connection);
-        }
-
-        return articles;
+        return findLastAdded(5);
     }
 
     @Override
@@ -111,22 +84,27 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
         PreparedStatement st = null;
         ResultSet rs = null;
 
-        String FIND_ALL_SQL = "SELECT id, authorId, title, text, creationDate FROM article ORDER BY creationDate DESC LIMIT " + limit;
         List<Article> articles = new ArrayList<>();
 
         try {
-            st = connection.prepareStatement(FIND_ALL_SQL);
-//            st.setMaxRows(); // TODO limit
+            st = connection.prepareStatement(FIND_LAST_ARTICLES_SQL);
+            st.setMaxRows(limit);
+
             rs = st.executeQuery();
 
             while (rs.next()) {
                 Article article = new Article();
+                article.setId(rs.getInt("articleId"));
+                article.setTitle(rs.getString("articleTitle"));
+                article.setText(rs.getString("articleText"));
+                article.setDate(rs.getDate("articleCreationDate"));
 
-                article.setId(rs.getInt("id"));
-                article.setId(rs.getInt("authorId"));
-                article.setTitle(rs.getString("title"));
-                article.setText(rs.getString("text"));
-                article.setDate(rs.getDate("creationDate"));
+                User author = new User();
+                author.setId(rs.getInt("authorId"));
+                author.setName(rs.getString("authorName"));
+                author.setEmail(rs.getString("authorEmail"));
+
+                article.setAuthor(author);
 
                 articles.add(article);
             }
@@ -149,21 +127,26 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
         PreparedStatement st = null;
         ResultSet rs = null;
 
-        String FIND_ALL_SQL = "SELECT id, authorId, title, text, creationDate FROM article";
         List<Article> articles = new ArrayList<>();
 
         try {
-            st = connection.prepareStatement(FIND_ALL_SQL);
+            st = connection.prepareStatement(FIND_ALL_ARTICLES_SQL);
             rs = st.executeQuery();
 
             while (rs.next()) {
                 Article article = new Article();
+                User author = new User();
 
-                article.setId(rs.getInt("id"));
-                article.setId(rs.getInt("authorId"));
-                article.setTitle(rs.getString("title"));
-                article.setText(rs.getString("text"));
-                article.setDate(rs.getDate("creationDate"));
+                article.setId(rs.getInt("articleId"));
+                article.setTitle(rs.getString("articleTitle"));
+                article.setText(rs.getString("articleText"));
+                article.setDate(rs.getDate("articleCreationDate"));
+
+                author.setId(rs.getInt("authorId"));
+                author.setName(rs.getString("authorName"));
+                author.setEmail(rs.getString("authorEmail"));
+
+                article.setAuthor(author);
 
                 articles.add(article);
             }
@@ -186,22 +169,27 @@ public class ArticleDaoImpl extends AbstractDao<Article> implements ArticleDao<A
         PreparedStatement st = null;
         ResultSet rs = null;
 
-        String FIND_BY_ID_SQL = "SELECT id, authorId, title, text, creationDate FROM article WHERE id=?";
         Article article = null;
 
         try {
-            st = connection.prepareStatement(FIND_BY_ID_SQL);
+            st = connection.prepareStatement(FIND_ARTICLE_BY_ID_SQL);
             st.setInt(1, id);
             rs = st.executeQuery();
 
             if (rs.next()) {
                 article = new Article();
+                User author = new User();
 
-                article.setId(rs.getInt("id"));
-                article.setId(rs.getInt("authorId"));
-                article.setTitle(rs.getString("title"));
-                article.setText(rs.getString("text"));
-                article.setDate(rs.getDate("creationDate"));
+                article.setId(rs.getInt("articleId"));
+                article.setTitle(rs.getString("articleTitle"));
+                article.setText(rs.getString("articleText"));
+                article.setDate(rs.getDate("articleCreationDate"));
+
+                author.setId(rs.getInt("authorId"));
+                author.setName(rs.getString("authorName"));
+                author.setEmail(rs.getString("authorEmail"));
+
+                article.setAuthor(author);
             }
 
             return article;
