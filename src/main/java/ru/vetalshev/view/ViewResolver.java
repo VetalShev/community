@@ -11,18 +11,15 @@ public class ViewResolver {
     public ViewResolver() {
     }
 
-//    public ViewResolver(String fileName) {
-//        getView(fileName);
-//    }
-
-    public View getView(String name) throws ViewResolverException {
+    public String resolve(String name) throws ViewResolverException {
         String viewPath = CONTEXT + name + ".jsp";
         File f = new File(viewPath);
 
-        if (f.exists() && f.isFile()) { // !f.isDirectory()
-            return new View(viewPath);
-        }
+        //TODO: вернуть проверку наличия файла после того как разберемся с передачей контекста во вью резолвер
+//        if (f.exists() && f.isFile()) { // !f.isDirectory()
+            return viewPath;
+//        }
 
-        throw new ViewResolverException("File not found: " + viewPath);
+//        throw new ViewResolverException("File not found: " + viewPath);
     }
 }

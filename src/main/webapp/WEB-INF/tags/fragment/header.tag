@@ -3,8 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:url var="homeUrl" value="/" />
-<c:url var="articlesUrl" value="/" />
-<c:url var="usersUrl" value="/" />
+<c:url var="articlesUrl" value="/articles" />
+<c:url var="usersUrl" value="/users" />
 
 <div class="header">
     <ul>
@@ -19,3 +19,4 @@
         </li>
     </ul>
 </div>
+<hr/>

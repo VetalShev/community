@@ -4,28 +4,29 @@ import ru.vetalshev.AppContext;
 import ru.vetalshev.controller.AbstractController;
 import ru.vetalshev.dao.ArticleDao;
 import ru.vetalshev.model.Article;
+import ru.vetalshev.view.Model;
+import ru.vetalshev.view.View;
+import ru.vetalshev.view.ViewAndModel;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class HomeControllerImpl extends AbstractController {
 
-    public HomeControllerImpl(HttpServletRequest request, HttpServletResponse response) {
-        super(request, response);
+    public HomeControllerImpl() {
+        super();
         System.out.println("CONSTRUCTOR HomeControllerImpl");
     }
 
-    public String renderLastArticles() {
-        HttpServletRequest request = getRequest();
-
+    public ViewAndModel renderLastArticles() {
         ArticleDao articleDao = AppContext.getArticleDao();
         List<Article> articles = articleDao.findLastAdded(3);
 
-        request.setAttribute("articles", articles);
+        View view = new View("index");
+        Model model = new Model();
 
+        model.put("articles", articles);
 
-        return "/index.jsp";
+        return new ViewAndModel(view, model);
     }
 
 }

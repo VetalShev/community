@@ -51,7 +51,7 @@
                     <path>/${project.build.finalName}</path>
                     <update>true</update>
                     <url>http://localhost:8080/manager/text</url>
-                    <server>vetalshev_server</server>
+                    <server>tomcat7</server>
                 </configuration>
             </plugin>
             <plugin>

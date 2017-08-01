@@ -8,7 +8,7 @@
 <c:set var="title" value="Users list" />
 
 <template:master metaTitle="${title}">
-    <h1>title</h1>
+    <h1>${title}</h1>
 
     <ul>
         <c:forEach items="${users}" var="user">

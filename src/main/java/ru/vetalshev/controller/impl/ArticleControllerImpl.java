@@ -6,21 +6,20 @@ import ru.vetalshev.dao.ArticleDao;
 import ru.vetalshev.dao.CommentDao;
 import ru.vetalshev.model.Article;
 import ru.vetalshev.model.Comment;
+import ru.vetalshev.view.Model;
+import ru.vetalshev.view.View;
+import ru.vetalshev.view.ViewAndModel;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class ArticleControllerImpl extends AbstractController {
 
-    public ArticleControllerImpl(HttpServletRequest request, HttpServletResponse response) {
-        super(request, response);
+    public ArticleControllerImpl() {
+        super();
         System.out.println("CONSTRUCTOR ArticleControllerImpl");
     }
 
-    public String renderArticle(int articleId) {
-        HttpServletRequest request = getRequest();
-
+    public ViewAndModel renderArticle(int articleId) {
         ArticleDao<Article> articleDao = AppContext.getArticleDao();
         Article article = articleDao.findById(articleId);
 
@@ -29,19 +28,24 @@ public class ArticleControllerImpl extends AbstractController {
 
         article.setComments(comments);
 
-        request.setAttribute("article", article);
+        View view = new View("article");
+        Model model = new Model();
 
-        return "/article.jsp";
+        model.put("article", article);
+
+        return new ViewAndModel(view, model);
     }
 
-    public String renderArticleList() {
-        HttpServletRequest request = getRequest();
+    public ViewAndModel renderArticleList() {
         ArticleDao<Article> articleDao = AppContext.getArticleDao();
         List<Article> articles = articleDao.findAll();
 
-        request.setAttribute("articles", articles);
+        View view = new View("articles");
+        Model model = new Model();
 
-        return "/articles.jsp";
+        model.put("articles", articles);
+
+        return new ViewAndModel(view, model);
     }
 
 }

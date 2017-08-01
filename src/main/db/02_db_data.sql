@@ -1,57 +1,91 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
---
--- Host: localhost    Database: vetalshev_db
--- ------------------------------------------------------
--- Server version	5.7.18-log
+-- Database 'community'
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+-- Populate table 'user'
+INSERT INTO user (name, email) VALUES ('Vitalii Shevchenko', 'vitalii_shevchenko@gmail.com');
+INSERT INTO user (name, email) VALUES ('Konstantin Khristorozhdestvenskii', 'konstantin_khristorozhdestvenskii@gmail.com');
+INSERT INTO user (name, email) VALUES ('John Smith', 'john_smith@gmail.com');
+INSERT INTO user (name, email) VALUES ('Bob Martin', 'bob_martin@gmail.com');
+INSERT INTO user (name, email) VALUES ('Jack London', 'jack_london@gmail.com');
+INSERT INTO user (name, email) VALUES ('David Duchovny', 'david_duchovny@gmail.com');
+INSERT INTO user (name, email) VALUES ('Addy Osmany', 'addy_osmany@gmail.com');
 
---
--- Dumping data for table `order`
---
 
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (1,'2017-05-15 14:23:05'),(2,'2017-05-15 14:23:43'),(3,'2017-05-15 14:25:05'),(4,'2017-05-15 14:25:11');
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
-UNLOCK TABLES;
+-- Populate table 'article'
+INSERT INTO article (title, creationDate, authorId, text) VALUES(
+    'My first technical article',
+    '2017-05-12',
+    1,
+    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
+);
 
---
--- Dumping data for table `order_product`
---
+INSERT INTO article (title, creationDate, authorId, text) VALUES(
+    'My second technical article',
+    '2017-05-15',
+    1,
+    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.'
+);
 
-LOCK TABLES `order_product` WRITE;
-/*!40000 ALTER TABLE `order_product` DISABLE KEYS */;
-INSERT INTO `order_product` VALUES (1,1,1,1),(2,9,1,1),(3,13,2,100),(4,13,3,1),(5,4,4,7),(6,5,4,1),(7,6,4,1),(8,7,3,20),(9,8,3,1),(10,7,1,20);
-/*!40000 ALTER TABLE `order_product` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO article (title, creationDate, authorId, text) VALUES(
+    'What is Lorem Ipsum?',
+    '2017-07-15',
+    7,
+    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
+);
 
---
--- Dumping data for table `product`
---
+INSERT INTO article (title, creationDate, authorId, text) VALUES(
+    'Where does Lorem Ipsum come from?',
+    '2017-07-15',
+    7,
+    'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.'
+);
 
-LOCK TABLES `product` WRITE;
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Lenovo ThinkPad X1','Lenovo',1526),(3,'Lenovo ThinkPad X1 Carbon 4Gen','Lenovo',1300),(4,'Acer Swift 5','Acer',1350),(5,'Acer Swift 3','Acer',1200),(6,'Acer Swift 7','Acer',1700),(7,'Dell XPS 15','Dell',1750),(8,'Dell XPS 13','Dell',1450),(9,'Xiaomi Mi Air 13.3','Xiaomi',1150),(10,'Apple MacBook Pro 15','Apple',2700),(11,'Apple MacBook Pro 13','Apple',2250),(12,'Apple MacBook Air','Apple',1800),(13,'Lenovo ThinkPad X1 Carbon 5Gen','Lenovo',2100),(14,'Acer Aspire S3 i7-6500U','Acer',1300),(15,'Acer Aspire S3 i5-6200U','Acer',1150);
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO article (title, creationDate, authorId, text) VALUES(
+    'Why do we use Lorem Ipsum?',
+    '2017-07-15',
+    7,
+    'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using ''Content here, content here'', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for ''lorem ipsum'' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).'
+);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+INSERT INTO article (title, creationDate, authorId, text) VALUES(
+    'Where can I get some Lorem Ipsum?',
+    '2017-07-15',
+    7,
+    'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don''t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn''t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.'
+);
 
--- Dump completed on 2017-06-23 11:40:45
+
+-- Populate table 'comment'
+INSERT INTO comment (authorId, articleId, date, text) VALUES(
+    1,
+    3,
+    '2017-07-18',
+    'Some dummy comment text.'
+);
+
+INSERT INTO comment (authorId, articleId, date, text) VALUES(
+    1,
+    3,
+    '2017-07-18',
+    'One more dummy comment text.'
+);
+
+INSERT INTO comment (authorId, articleId, date, text) VALUES(
+    3,
+    3,
+    '2017-07-15',
+    'Good article. Thanks a lot!'
+);
+
+INSERT INTO comment (authorId, articleId, date, text) VALUES(
+    7,
+    1,
+    '2017-05-15',
+    'Accept my sinscere congratulations about your first article. It''s a good article!'
+);
+
+INSERT INTO comment (authorId, articleId, date, text) VALUES(
+    1,
+    1,
+    '2017-05-16',
+    'Thanks :)'
+);

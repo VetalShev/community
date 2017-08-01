@@ -3,6 +3,7 @@ package ru.vetalshev;
 import ru.vetalshev.controller.impl.ArticleControllerImpl;
 import ru.vetalshev.controller.impl.HomeControllerImpl;
 import ru.vetalshev.controller.impl.UserControllerImpl;
+import ru.vetalshev.view.ViewAndModel;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,12 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//@WebServlet(
-//        urlPatterns = "/"
-//)
+@WebServlet(
+        urlPatterns = "/"
+)
 public class DispatcherServlet extends HttpServlet {
 
     public DispatcherServlet() {
@@ -35,39 +37,44 @@ public class DispatcherServlet extends HttpServlet {
         Pattern pattern = Pattern.compile(URL_PATTERN);
         Matcher matcher = pattern.matcher(uriFreeContextPath);
 
-        String view = null;
+        ViewAndModel viewModel = null;
 
         if (matcher.find()) {
             String group1 = matcher.group(1);
             String group2 = matcher.group(2);
 
             if (group1.startsWith("/articles")) {
-                ArticleControllerImpl articleController = new ArticleControllerImpl(req, resp);
+                ArticleControllerImpl articleController = (ArticleControllerImpl) AppContext.getArticleController();
                 if (group2 != null && group2.length() > 0) {
-                    view = articleController.renderArticle(Integer.parseInt(group2));
+                    viewModel = articleController.renderArticle(Integer.parseInt(group2));
                 } else {
-                    view = articleController.renderArticleList();
+                    viewModel = articleController.renderArticleList();
                 }
             } else if (group1.startsWith("/users")) {
-                UserControllerImpl userController = new UserControllerImpl(req, resp);
+                UserControllerImpl userController = (UserControllerImpl) AppContext.getUserController();
 
                 if (group2 != null && group2.length() > 0) {
-                    view = userController.renderUser(Integer.parseInt(group2));
+                    viewModel = userController.renderUser(Integer.parseInt(group2));
                 } else {
-                    view = userController.renderUserList();
+                    viewModel = userController.renderUserList();
                 }
             } else {
-                HomeControllerImpl homeController = new HomeControllerImpl(req, resp); // or PageNotFound Controller
-                view = homeController.renderLastArticles();
+                HomeControllerImpl homeController = (HomeControllerImpl) AppContext.getHomeController(); // or PageNotFound Controller
+                viewModel = homeController.renderLastArticles();
             }
         } else {
-            HomeControllerImpl homeController = new HomeControllerImpl(req, resp); // or PageNotFound Controller
-            view = homeController.renderLastArticles();
+            HomeControllerImpl homeController = (HomeControllerImpl) AppContext.getHomeController(); // or PageNotFound Controller
+            viewModel = homeController.renderLastArticles();
         }
 
         resp.setContentType("text/html");
 
-        RequestDispatcher appDispatcher = req.getRequestDispatcher(view);
+        // populate page model with data from Controller
+        for (Map.Entry<String, Object> entry : viewModel.getModel().entrySet()) {
+            req.setAttribute(entry.getKey(), entry.getValue());
+        }
+
+        RequestDispatcher appDispatcher = req.getRequestDispatcher(viewModel.getView().getName());
         appDispatcher.forward(req, resp);
     }
 

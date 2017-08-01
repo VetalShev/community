@@ -4,36 +4,41 @@ import ru.vetalshev.AppContext;
 import ru.vetalshev.controller.AbstractController;
 import ru.vetalshev.dao.UserDao;
 import ru.vetalshev.model.User;
+import ru.vetalshev.view.Model;
+import ru.vetalshev.view.View;
+import ru.vetalshev.view.ViewAndModel;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class UserControllerImpl extends AbstractController {
 
-    public UserControllerImpl(HttpServletRequest request, HttpServletResponse response) {
-        super(request, response);
+    public UserControllerImpl() {
+        super();
         System.out.println("CONSTRUCTOR UserControllerImpl");
     }
 
-    public String renderUser(int userId) {
-        HttpServletRequest request = getRequest();
+    public ViewAndModel renderUser(int userId) {
         UserDao<User> userDao = AppContext.getUserDao();
         User user = userDao.findById(userId);
 
-        request.setAttribute("user", user);
+        View view = new View("user");
+        Model model = new Model();
 
-        return "/user.jsp";
+        model.put("user", user);
+
+        return new ViewAndModel(view, model);
     }
 
-    public String renderUserList() {
-        HttpServletRequest request = getRequest();
+    public ViewAndModel renderUserList() {
         UserDao<User> userDao = AppContext.getUserDao();
         List<User> users = userDao.findAll();
 
-        request.setAttribute("users", users);
+        View view = new View("users");
+        Model model = new Model();
 
-        return "/users.jsp";
+        model.put("users", users);
+
+        return new ViewAndModel(view, model);
     }
 
 }

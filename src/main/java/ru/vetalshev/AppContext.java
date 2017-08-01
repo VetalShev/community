@@ -1,5 +1,9 @@
 package ru.vetalshev;
 
+import ru.vetalshev.controller.Controller;
+import ru.vetalshev.controller.impl.ArticleControllerImpl;
+import ru.vetalshev.controller.impl.HomeControllerImpl;
+import ru.vetalshev.controller.impl.UserControllerImpl;
 import ru.vetalshev.dao.*;
 import ru.vetalshev.dao.impl.ArticleDaoImpl;
 import ru.vetalshev.dao.impl.CommentDaoImpl;
@@ -43,6 +47,18 @@ public class AppContext {
         public static final CommentDao<Comment> commentDao = new CommentDaoImpl();
     }
 
+    private static class HomeControllerHolder {
+        public static final HomeControllerImpl homeCtrl = new HomeControllerImpl();
+    }
+
+    private static class UserControllerHolder {
+        public static final UserControllerImpl userCtrl = new UserControllerImpl();
+    }
+
+    private static class ArticleControllerHolder {
+        public static final ArticleControllerImpl articleCtrl = new ArticleControllerImpl();
+    }
+
     public static DataSource getDataSource() {
         return DataSourceHolder.dataSource;
     }
@@ -57,6 +73,18 @@ public class AppContext {
 
     public static CommentDao<Comment> getCommentDao() {
         return CommentDaoHolder.commentDao;
+    }
+
+    public static Controller getHomeController() {
+        return HomeControllerHolder.homeCtrl;
+    }
+
+    public static Controller getUserController() {
+        return UserControllerHolder.userCtrl;
+    }
+
+    public static Controller getArticleController() {
+        return ArticleControllerHolder.articleCtrl;
     }
 
 }
