@@ -1,32 +1,35 @@
 package ru.vetalshev.controller.impl;
 
-import ru.vetalshev.AppContext;
 import ru.vetalshev.controller.AbstractController;
 import ru.vetalshev.dao.ArticleDao;
+import ru.vetalshev.core.Model;
+import ru.vetalshev.core.ViewAndModel;
+import ru.vetalshev.core.annotation.RequestMapping;
 import ru.vetalshev.model.Article;
-import ru.vetalshev.view.Model;
-import ru.vetalshev.view.View;
-import ru.vetalshev.view.ViewAndModel;
+import ru.vetalshev.core.impl.ModelImpl;
+import ru.vetalshev.core.impl.ViewAndModelImpl;
 
 import java.util.List;
 
+@RequestMapping("/")
 public class HomeControllerImpl extends AbstractController {
 
-    public HomeControllerImpl() {
+    private ArticleDao<Article> articleDao;
+
+    public HomeControllerImpl(ArticleDao<Article> articleDao) {
         super();
+        this.articleDao = articleDao;
         System.out.println("CONSTRUCTOR HomeControllerImpl");
     }
 
+    @RequestMapping("/")
     public ViewAndModel renderLastArticles() {
-        ArticleDao articleDao = AppContext.getArticleDao();
         List<Article> articles = articleDao.findLastAdded(3);
 
-        View view = new View("index");
-        Model model = new Model();
+        Model model = new ModelImpl();
+        model.addAttribute("articles", articles);
 
-        model.put("articles", articles);
-
-        return new ViewAndModel(view, model);
+        return new ViewAndModelImpl("index", model);
     }
 
 }

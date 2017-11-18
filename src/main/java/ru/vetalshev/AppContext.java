@@ -48,15 +48,20 @@ public class AppContext {
     }
 
     private static class HomeControllerHolder {
-        public static final HomeControllerImpl homeCtrl = new HomeControllerImpl();
+        public static final HomeControllerImpl homeCtrl = new HomeControllerImpl(getArticleDao());
     }
 
     private static class UserControllerHolder {
-        public static final UserControllerImpl userCtrl = new UserControllerImpl();
+        public static final UserControllerImpl userCtrl = new UserControllerImpl(getUserDao());
+
+        // TODO: move params from constructor to static section and set them via corresponding setters
+//        static {
+//            userCtrl.setAttribute(dao);
+//        }
     }
 
     private static class ArticleControllerHolder {
-        public static final ArticleControllerImpl articleCtrl = new ArticleControllerImpl();
+        public static final ArticleControllerImpl articleCtrl = new ArticleControllerImpl(getArticleDao(), getCommentDao());
     }
 
     public static DataSource getDataSource() {

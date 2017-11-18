@@ -4,48 +4,50 @@ import ru.vetalshev.AppContext;
 import ru.vetalshev.controller.AbstractController;
 import ru.vetalshev.dao.ArticleDao;
 import ru.vetalshev.dao.CommentDao;
+import ru.vetalshev.core.Model;
+import ru.vetalshev.core.ViewAndModel;
+import ru.vetalshev.core.annotation.RequestMapping;
 import ru.vetalshev.model.Article;
 import ru.vetalshev.model.Comment;
-import ru.vetalshev.view.Model;
-import ru.vetalshev.view.View;
-import ru.vetalshev.view.ViewAndModel;
+import ru.vetalshev.core.impl.ModelImpl;
+import ru.vetalshev.core.impl.ViewAndModelImpl;
 
 import java.util.List;
 
+@RequestMapping("/articles")
 public class ArticleControllerImpl extends AbstractController {
 
-    public ArticleControllerImpl() {
+    ArticleDao<Article> articleDao;
+    CommentDao<Comment> commentDao;
+
+    public ArticleControllerImpl(ArticleDao<Article> articleDao, CommentDao<Comment> commentDao) {
         super();
+        this.articleDao = articleDao;
+        this.commentDao = commentDao;
         System.out.println("CONSTRUCTOR ArticleControllerImpl");
     }
 
+    @RequestMapping("/{articleId}")
     public ViewAndModel renderArticle(int articleId) {
-        ArticleDao<Article> articleDao = AppContext.getArticleDao();
         Article article = articleDao.findById(articleId);
-
-        CommentDao<Comment> commentDao = AppContext.getCommentDao();
         List<Comment> comments = commentDao.findAll(articleId);
 
         article.setComments(comments);
 
-        View view = new View("article");
-        Model model = new Model();
+        Model model = new ModelImpl();
+        model.addAttribute("article", article);
 
-        model.put("article", article);
-
-        return new ViewAndModel(view, model);
+        return new ViewAndModelImpl("article", model);
     }
 
+    @RequestMapping("/")
     public ViewAndModel renderArticleList() {
-        ArticleDao<Article> articleDao = AppContext.getArticleDao();
         List<Article> articles = articleDao.findAll();
 
-        View view = new View("articles");
-        Model model = new Model();
+        Model model = new ModelImpl();
+        model.addAttribute("articles", articles);
 
-        model.put("articles", articles);
-
-        return new ViewAndModel(view, model);
+        return new ViewAndModelImpl("articles", model);
     }
 
 }

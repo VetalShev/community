@@ -3,42 +3,45 @@ package ru.vetalshev.controller.impl;
 import ru.vetalshev.AppContext;
 import ru.vetalshev.controller.AbstractController;
 import ru.vetalshev.dao.UserDao;
+import ru.vetalshev.core.Model;
+import ru.vetalshev.core.ViewAndModel;
+import ru.vetalshev.core.annotation.RequestMapping;
 import ru.vetalshev.model.User;
-import ru.vetalshev.view.Model;
-import ru.vetalshev.view.View;
-import ru.vetalshev.view.ViewAndModel;
+import ru.vetalshev.core.impl.ModelImpl;
+import ru.vetalshev.core.impl.ViewAndModelImpl;
 
 import java.util.List;
 
+@RequestMapping("/users")
 public class UserControllerImpl extends AbstractController {
 
-    public UserControllerImpl() {
+    private UserDao<User> userDao;
+
+    public UserControllerImpl(UserDao<User> userDao) {
         super();
+        this.userDao = userDao;
         System.out.println("CONSTRUCTOR UserControllerImpl");
     }
 
+    @RequestMapping("/{userId}")
     public ViewAndModel renderUser(int userId) {
-        UserDao<User> userDao = AppContext.getUserDao();
         User user = userDao.findById(userId);
 
-        View view = new View("user");
-        Model model = new Model();
+        Model model = new ModelImpl();
+        model.addAttribute("user", user);
 
-        model.put("user", user);
-
-        return new ViewAndModel(view, model);
+        return new ViewAndModelImpl("user", model);
     }
 
+    @RequestMapping("/")
     public ViewAndModel renderUserList() {
         UserDao<User> userDao = AppContext.getUserDao();
         List<User> users = userDao.findAll();
 
-        View view = new View("users");
-        Model model = new Model();
+        Model model = new ModelImpl();
+        model.addAttribute("users", users);
 
-        model.put("users", users);
-
-        return new ViewAndModel(view, model);
+        return new ViewAndModelImpl("users", model);
     }
 
 }

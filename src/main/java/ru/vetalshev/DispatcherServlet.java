@@ -1,20 +1,19 @@
 package ru.vetalshev;
 
-import ru.vetalshev.controller.impl.ArticleControllerImpl;
-import ru.vetalshev.controller.impl.HomeControllerImpl;
-import ru.vetalshev.controller.impl.UserControllerImpl;
-import ru.vetalshev.view.ViewAndModel;
+import ru.vetalshev.controller.Controller;
+import ru.vetalshev.core.*;
+import ru.vetalshev.core.exception.ControllerNotFoundException;
+import ru.vetalshev.core.exception.HandlerResolverException;
+import ru.vetalshev.core.impl.*;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @WebServlet(
         urlPatterns = "/"
@@ -26,56 +25,52 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("DO_GET");
 
-        String URL_PATTERN = "^(/articles|/users)(?:/([\\d]*))?$";
-        String contextPath = req.getContextPath();
-        String uri = req.getRequestURI();
-        String uriFreeContextPath = uri.substring(contextPath.length());
+        HandlerResolver handlerResolver = new HandlerResolverImpl();
+        HandlerInvoker invoker = new HandlerInvokerImpl();
+        ViewResolver viewResolver = new ViewResolverImpl();
 
-        Pattern pattern = Pattern.compile(URL_PATTERN);
-        Matcher matcher = pattern.matcher(uriFreeContextPath);
+        ControllerAndMethod cm = null;
 
-        ViewAndModel viewModel = null;
+        try {
+            cm = handlerResolver.resolveMethod(request, response);
+        } catch (HandlerResolverException|ControllerNotFoundException e) {
+            try {
+                Class controllerToBeInvoked = Class.forName("ru.vetalshev.controller.impl" + ".HomeControllerImpl");
+                Method methodToBeInvoked = controllerToBeInvoked.getMethod("renderLastArticles");
+                String name = controllerToBeInvoked.getSimpleName();
 
-        if (matcher.find()) {
-            String group1 = matcher.group(1);
-            String group2 = matcher.group(2);
+                cm = new ControllerAndMethod();
 
-            if (group1.startsWith("/articles")) {
-                ArticleControllerImpl articleController = (ArticleControllerImpl) AppContext.getArticleController();
-                if (group2 != null && group2.length() > 0) {
-                    viewModel = articleController.renderArticle(Integer.parseInt(group2));
-                } else {
-                    viewModel = articleController.renderArticleList();
-                }
-            } else if (group1.startsWith("/users")) {
-                UserControllerImpl userController = (UserControllerImpl) AppContext.getUserController();
-
-                if (group2 != null && group2.length() > 0) {
-                    viewModel = userController.renderUser(Integer.parseInt(group2));
-                } else {
-                    viewModel = userController.renderUserList();
-                }
-            } else {
-                HomeControllerImpl homeController = (HomeControllerImpl) AppContext.getHomeController(); // or PageNotFound Controller
-                viewModel = homeController.renderLastArticles();
+                cm.setMethod(methodToBeInvoked);
+                cm.setControllerName(name.substring(0, name.length() - 4));
+                cm.setMethodParams(null);
+            } catch (ClassNotFoundException | NoSuchMethodException ex) {
+                throw new RuntimeException("Can't resolve either Controller or Method name", ex);
             }
-        } else {
-            HomeControllerImpl homeController = (HomeControllerImpl) AppContext.getHomeController(); // or PageNotFound Controller
-            viewModel = homeController.renderLastArticles();
         }
 
-        resp.setContentType("text/html");
+        Controller controller = null;
 
-        // populate page model with data from Controller
-        for (Map.Entry<String, Object> entry : viewModel.getModel().entrySet()) {
-            req.setAttribute(entry.getKey(), entry.getValue());
+        try {
+            controller = (Controller) AppContext.class.getMethod("get" + cm.getControllerName()).invoke(null);
+        } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
+            e.printStackTrace();
         }
 
-        RequestDispatcher appDispatcher = req.getRequestDispatcher(viewModel.getView().getName());
-        appDispatcher.forward(req, resp);
+        // ====================
+
+        HandlerInvokerDataObj handlerInvokerDataObj = new HandlerInvokerDataObj();
+        handlerInvokerDataObj.setController(controller);
+        handlerInvokerDataObj.setHandler(cm.getMethod());
+        handlerInvokerDataObj.setHandlerParams(cm.getMethodParams());
+
+        ViewAndModel vm = invoker.handle(handlerInvokerDataObj);
+        View view = viewResolver.resolve(request, vm.getViewName());
+
+        view.render(request, response, vm);
     }
 
 }

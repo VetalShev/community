@@ -1,4 +1,4 @@
-package ru.vetalshev.view.exception;
+package ru.vetalshev.core.exception;
 
 public class ViewResolverException extends RuntimeException {
 
